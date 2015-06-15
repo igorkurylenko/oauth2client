@@ -11,7 +11,7 @@
 
   <servlet-mapping>
     <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/oauth2-implicit/greet</url-pattern>
+    <url-pattern>/oauth2client/greet</url-pattern>
   </servlet-mapping>
 
 	<!-- Default page to serve -->
