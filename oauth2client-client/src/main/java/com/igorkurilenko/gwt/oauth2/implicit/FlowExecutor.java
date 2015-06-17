@@ -1,7 +1,64 @@
 package com.igorkurilenko.gwt.oauth2.implicit;
 
-public interface FlowExecutor extends FlowInitializer, FlowFinalizer {
+import com.igorkurilenko.gwt.oauth2.OAuth2Request;
+import com.igorkurilenko.gwt.oauth2.OAuth2RequestCallback;
+import com.igorkurilenko.gwt.oauth2.OAuth2Response;
 
-    boolean isInProgress();
+public abstract class FlowExecutor implements FlowInitializer, FlowFinalizer {
+
+    private boolean inProgress = false;
+    private String state;
+
+    @Override
+    public void run(OAuth2Request request) {
+        if (isInProgress()) {
+            throw new IllegalStateException("Authorization is in progress");
+        }
+
+        inProgress = true;
+
+        state = request.getState();
+
+        start(request);
+    }
+
+    public final boolean isInProgress() {
+        return inProgress;
+    }
+
+    protected abstract void start(OAuth2Request request);
+
+    @Override
+    public void onResponse(OAuth2Response response, OAuth2RequestCallback callback) {
+        inProgress = false;
+
+        processResponse(response, callback);
+
+        finish();
+    }
+
+    private void processResponse(OAuth2Response response, OAuth2RequestCallback callback) {
+        try {
+            validateOAuth2Response(response);
+
+            callback.onSuccess(response);
+
+        } catch (Exception x) {
+            callback.onFailure(x);
+        }
+    }
+
+    private void validateOAuth2Response(OAuth2Response response) {
+        String stateFomResponse = response.getState();
+
+        if (stateFomResponse == null) {
+            throw new RuntimeException("OAuth2 response 'state' parameter was not provided");
+
+        } else if (!stateFomResponse.equals(state)) {
+            throw new RuntimeException("Request and response 'state' parameters mismatch");
+        }
+    }
+
+    protected abstract void finish();
 
 }

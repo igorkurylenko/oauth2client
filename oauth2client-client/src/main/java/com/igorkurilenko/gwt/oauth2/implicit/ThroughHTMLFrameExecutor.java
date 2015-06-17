@@ -1,22 +1,30 @@
 package com.igorkurilenko.gwt.oauth2.implicit;
 
+import com.google.gwt.user.client.ui.Frame;
 import com.igorkurilenko.gwt.oauth2.OAuth2Request;
-import com.igorkurilenko.gwt.oauth2.OAuth2RequestCallback;
-import com.igorkurilenko.gwt.oauth2.OAuth2Response;
 
-public class ThroughHTMLFrameExecutor implements FlowExecutor{
-    @Override
-    public boolean isInProgress() {
-        throw new UnsupportedOperationException("Not implemented yet.");
+public class ThroughHTMLFrameExecutor extends FlowExecutor {
+
+    private final Frame frame;
+
+    public ThroughHTMLFrameExecutor(Frame frame) {
+        this.frame = frame;
+    }
+
+    protected void start(OAuth2Request request) {
+        String url = buildUrl(request);
+
+        frame.setUrl(url);
+    }
+
+    private String buildUrl(OAuth2Request request) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void finalizeFlow(OAuth2Response response) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+    protected void finish() {
     }
 
-    @Override
-    public void initFlow(OAuth2Request request, OAuth2RequestCallback callback) {
-        throw new UnsupportedOperationException("Not implemented yet.");
-    }
+
 }
+

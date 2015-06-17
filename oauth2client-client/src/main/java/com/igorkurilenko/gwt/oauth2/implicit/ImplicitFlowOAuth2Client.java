@@ -13,7 +13,6 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
     private static Map<String, ImplicitFlowOAuth2Client> INSTANCES = new HashMap<>();
     private FlowExecutor flowExecutor;
     private OAuth2RequestCallback callback;
-    private String state;
 
     private ImplicitFlowOAuth2Client() {
     }
@@ -72,13 +71,12 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
         }
 
         this.callback = callback;
-        this.state = request.getState();
 
         if (flowExecutor == null) {
             flowExecutor = createDefaultFlowExecutor();
         }
 
-        flowExecutor.initFlow(request, callback);
+        flowExecutor.run(request);
     }
 
     private FlowExecutor createDefaultFlowExecutor() {
@@ -109,19 +107,7 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
             throw new IllegalStateException("OAuth2 request was not sent");
         }
 
-        flowExecutor.finalizeFlow(response);
-
-        String stateFomResponse = response.getState();
-
-        if (stateFomResponse == null) {
-            callback.onFailure(new Throwable("OAuth2 response 'state' parameter was not provided"));
-
-        } else if (stateFomResponse.equals(state)) {
-            callback.onSuccess(response);
-
-        } else {
-            callback.onFailure(new Throwable("Request and response 'state' parameters mismatch"));
-        }
+        flowExecutor.onResponse(response, callback);
 
         callback = null;
     }
