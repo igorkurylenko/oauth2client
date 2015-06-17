@@ -11,7 +11,7 @@ public class ThroughHTMLFrameExecutor extends FlowExecutor {
         this.frame = frame;
     }
 
-    protected void start(OAuth2Request request) {
+    protected void execute(OAuth2Request request) {
         String url = buildUrl(request);
 
         frame.setUrl(url);

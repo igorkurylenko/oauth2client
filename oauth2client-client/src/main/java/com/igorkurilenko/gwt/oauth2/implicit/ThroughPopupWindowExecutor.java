@@ -51,7 +51,7 @@ public class ThroughPopupWindowExecutor extends FlowExecutor {
         this.windowHeight = windowHeight;
     }
 
-    protected void start(OAuth2Request request) {
+    protected void execute(OAuth2Request request) {
         String url = buildUrl(request);
 
         popupWindow = openPopupWindow(url, windowHeight, windowWidth);

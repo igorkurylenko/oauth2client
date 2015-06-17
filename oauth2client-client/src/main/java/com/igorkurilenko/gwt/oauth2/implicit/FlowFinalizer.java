@@ -5,6 +5,6 @@ import com.igorkurilenko.gwt.oauth2.OAuth2Response;
 
 public interface FlowFinalizer {
 
-    void onResponse(OAuth2Response response, OAuth2RequestCallback callback);
+    void finish(OAuth2Response response, OAuth2RequestCallback callback);
 
 }

@@ -107,7 +107,7 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
             throw new IllegalStateException("OAuth2 request was not sent");
         }
 
-        flowExecutor.onResponse(response, callback);
+        flowExecutor.finish(response, callback);
 
         callback = null;
     }

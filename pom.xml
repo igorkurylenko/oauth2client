@@ -100,8 +100,8 @@
         </pluginManagement>
     </build>
     <modules>
-        <module>oauth2-implicit-client</module>
-        <module>oauth2-implicit-shared</module>
-        <module>oauth2-implicit-server</module>
+        <module>oauth2client-client</module>
+        <module>oauth2client-shared</module>
+        <module>oauth2client-server</module>
     </modules>
 </project>
