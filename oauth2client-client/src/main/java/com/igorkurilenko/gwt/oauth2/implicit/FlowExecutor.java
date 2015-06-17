@@ -8,25 +8,24 @@ public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
 
     private boolean inProgress = false;
     private String state;
-    protected UrlFactory retrieveAccessTokenUrlFactory;
-    protected UrlFactory refreshAccessTokenUrlFactory;
+    protected AuthUrlFactory authUrlFactory;
+    protected OAuth2ResponseFactory responseFactory;
 
     public FlowExecutor() {
-        this(new RetrieveAccessTokenUrlFactory(), new RefreshAccessTokenUrlFactory());
+        this(new DefaultAuthUrlFactory(), new DefaultOAuth2ResponseFactory());
     }
 
-    public FlowExecutor(UrlFactory retrieveAccessTokenUrlFactory,
-                        UrlFactory refreshAccessTokenUrlFactory) {
-        this.retrieveAccessTokenUrlFactory = retrieveAccessTokenUrlFactory;
-        this.refreshAccessTokenUrlFactory = refreshAccessTokenUrlFactory;
+    public FlowExecutor(AuthUrlFactory authUrlFactory, OAuth2ResponseFactory responseFactory) {
+        this.authUrlFactory = authUrlFactory;
+        this.responseFactory = responseFactory;
     }
 
-    public void setRetrieveAccessTokenUrlFactory(UrlFactory retrieveAccessTokenUrlFactory) {
-        this.retrieveAccessTokenUrlFactory = retrieveAccessTokenUrlFactory;
+    public void setAuthUrlFactory(AuthUrlFactory authUrlFactory) {
+        this.authUrlFactory = authUrlFactory;
     }
 
-    public void setRefreshAccessTokenUrlFactory(UrlFactory refreshAccessTokenUrlFactory) {
-        this.refreshAccessTokenUrlFactory = refreshAccessTokenUrlFactory;
+    public void setResponseFactory(OAuth2ResponseFactory responseFactory) {
+        this.responseFactory = responseFactory;
     }
 
     @Override
@@ -49,12 +48,18 @@ public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
     protected abstract void execute(OAuth2Request request);
 
     @Override
-    public void finish(OAuth2Response response, OAuth2RequestCallback callback) {
+    public void finish(String uriFragment, OAuth2RequestCallback callback) {
         inProgress = false;
 
-        processResponse(response, callback);
+        processResponse(uriFragment, callback);
 
         finish();
+    }
+
+    private void processResponse(String uriFragment, OAuth2RequestCallback callback) {
+        OAuth2Response response = responseFactory.create(uriFragment);
+
+        processResponse(response, callback);
     }
 
     private void processResponse(OAuth2Response response, OAuth2RequestCallback callback) {

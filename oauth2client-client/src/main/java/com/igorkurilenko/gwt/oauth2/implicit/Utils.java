@@ -1,7 +1,14 @@
 package com.igorkurilenko.gwt.oauth2.implicit;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
+import com.google.gwt.regexp.shared.MatchResult;
+import com.google.gwt.regexp.shared.RegExp;
 import com.igorkurilenko.gwt.oauth2.OAuth2Request;
+import com.igorkurilenko.gwt.oauth2.OAuth2Response;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 class Utils {
@@ -49,4 +56,49 @@ class Utils {
     public static native String encodeURIComponent(String s) /*-{
         return encodeURIComponent(s);
     }-*/;
+
+    public static native String decodeURIComponent(String s) /*-{
+        return decodeURIComponent(s);
+    }-*/;
+
+    public static OAuth2Response uriFragmentToOAuth2Response(String hash) {
+        String query = getQuery(hash);
+
+        Map<String, String> params = parseUriFragment(query);
+
+        OAuth2Response authResponse = JavaScriptObject.createObject().cast();
+        authResponse.setAccessToken(params.get("access_token"));
+        authResponse.setExpiresIn(params.get("expires_in"));
+        authResponse.setState(params.get("state"));
+        authResponse.setError(params.get("error"));
+        authResponse.setErrorDescription(params.get("error_description"));
+        authResponse.setErrorUri(params.get("error_uri"));
+
+        return authResponse;
+    }
+
+    private static Map<String, String> parseUriFragment(String uriFragment) {
+        Map<String, String> params = new HashMap<String, String>();
+
+        RegExp regExp = RegExp.compile("([^&=]+)=([^&]*)", "gm");
+
+        for (MatchResult matchResult = regExp.exec(uriFragment); matchResult != null;
+             matchResult = regExp.exec(uriFragment)) {
+
+            String paramName = decodeURIComponent(matchResult.getGroup(1));
+            String paramValue = decodeURIComponent(matchResult.getGroup(2));
+
+            params.put(paramName, paramValue);
+        }
+
+        return params;
+    }
+
+    private static String getQuery(String uriFragment) {
+        if (uriFragment.length() > 0 && uriFragment.charAt(0) == '#') {
+            return uriFragment.substring(1);
+        }
+
+        return uriFragment;
+    }
 }

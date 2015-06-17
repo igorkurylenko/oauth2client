@@ -18,8 +18,6 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
     }
 
     public static OAuth2Client create(String jsCallbackFunctionName) {
-        ensureJsUtilsExported();
-
         ImplicitFlowOAuth2Client result = INSTANCES.get(jsCallbackFunctionName);
 
         if (result == null) {
@@ -30,9 +28,6 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
         return result;
     }
 
-    private static void ensureJsUtilsExported() {
-        // todo: export oauth2 js utils only once
-    }
 
     private static ImplicitFlowOAuth2Client newImplicitFlowOAuth2Client(
             String jsCallbackFunctionName) {
@@ -43,16 +38,15 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
         return result;
     }
 
-    // todo:
     private native void bindJsCallbackFunction(String jsCallbackFunctionName) /*-{
-        if (!$wnd.oauth2client) {
-            $wnd.oauth2client = {}
+        if (!$wnd.OAUTH2_CLIENT) {
+            $wnd.OAUTH2_CLIENT = {};
         }
 
-        var zis = this;
+        var thiz = this;
 
-        $wnd.oauth2client[jsCallbackFunctionName] = $entry(function (authResponse) {
-            zis.@com.igorkurilenko.gwt.oauth2.implicit.ImplicitFlowOAuth2Client::onResponse(*)(authResponse)
+        $wnd.OAUTH2_CLIENT[jsCallbackFunctionName] = $entry(function (hash) {
+            thiz.@com.igorkurilenko.gwt.oauth2.implicit.ImplicitFlowOAuth2Client::onRedirected(Ljava/lang/String;)(hash);
         });
     }-*/;
 
@@ -101,15 +95,16 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
     @Override
     public void refreshAccessToken(OAuth2Request request,
                                    OAuth2RequestCallback callback) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        throw new UnsupportedOperationException(
+                "Implicit grant flow does not support access token refreshing ");
     }
 
-    private void onResponse(OAuth2Response response) {
+    private void onRedirected(String uriFragment) {
         if (callback == null) {
             throw new IllegalStateException("OAuth2 request was not sent");
         }
 
-        flowExecutor.finish(response, callback);
+        flowExecutor.finish(uriFragment, callback);
 
         callback = null;
     }
