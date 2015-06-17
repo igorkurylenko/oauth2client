@@ -52,17 +52,13 @@ public class ThroughPopupWindowExecutor extends FlowExecutor {
     }
 
     protected void execute(OAuth2Request request) {
-        String url = buildUrl(request);
+        String url = retrieveAccessTokenUrlFactory.buildUrl(request);
 
         popupWindow = openPopupWindow(url, windowHeight, windowWidth);
 
         if (popupWindow == null) {
             throw new RuntimeException("Failed to open popup window");
         }
-    }
-
-    private String buildUrl(OAuth2Request request) {
-        throw new UnsupportedOperationException();
     }
 
     private native PopupWindow openPopupWindow(String url, int height, int width) /*-{

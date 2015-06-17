@@ -1,9 +1,9 @@
 package com.igorkurilenko.gwt.oauth2.implicit;
 
+import com.igorkurilenko.gwt.oauth2.OAuth2Client;
 import com.igorkurilenko.gwt.oauth2.OAuth2Request;
 import com.igorkurilenko.gwt.oauth2.OAuth2RequestCallback;
 import com.igorkurilenko.gwt.oauth2.OAuth2Response;
-import com.igorkurilenko.gwt.oauth2.OAuth2Client;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +43,7 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
         return result;
     }
 
+    // todo:
     private native void bindJsCallbackFunction(String jsCallbackFunctionName) /*-{
         if (!$wnd.oauth2client) {
             $wnd.oauth2client = {}
@@ -79,7 +80,7 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
         flowExecutor.run(request);
     }
 
-    private FlowExecutor createDefaultFlowExecutor() {
+    public static FlowExecutor createDefaultFlowExecutor() {
         return new ThroughPopupWindowExecutor();
     }
 
@@ -89,6 +90,7 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
         }
 
         this.flowExecutor = flowExecutor;
+
         return this;
     }
 

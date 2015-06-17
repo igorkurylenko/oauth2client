@@ -8,6 +8,26 @@ public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
 
     private boolean inProgress = false;
     private String state;
+    protected UrlFactory retrieveAccessTokenUrlFactory;
+    protected UrlFactory refreshAccessTokenUrlFactory;
+
+    public FlowExecutor() {
+        this(new RetrieveAccessTokenUrlFactory(), new RefreshAccessTokenUrlFactory());
+    }
+
+    public FlowExecutor(UrlFactory retrieveAccessTokenUrlFactory,
+                        UrlFactory refreshAccessTokenUrlFactory) {
+        this.retrieveAccessTokenUrlFactory = retrieveAccessTokenUrlFactory;
+        this.refreshAccessTokenUrlFactory = refreshAccessTokenUrlFactory;
+    }
+
+    public void setRetrieveAccessTokenUrlFactory(UrlFactory retrieveAccessTokenUrlFactory) {
+        this.retrieveAccessTokenUrlFactory = retrieveAccessTokenUrlFactory;
+    }
+
+    public void setRefreshAccessTokenUrlFactory(UrlFactory refreshAccessTokenUrlFactory) {
+        this.refreshAccessTokenUrlFactory = refreshAccessTokenUrlFactory;
+    }
 
     @Override
     public void run(OAuth2Request request) {

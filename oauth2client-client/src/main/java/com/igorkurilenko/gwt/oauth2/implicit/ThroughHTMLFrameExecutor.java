@@ -12,19 +12,14 @@ public class ThroughHTMLFrameExecutor extends FlowExecutor {
     }
 
     protected void execute(OAuth2Request request) {
-        String url = buildUrl(request);
+        String url = retrieveAccessTokenUrlFactory.buildUrl(request);
 
         frame.setUrl(url);
-    }
-
-    private String buildUrl(OAuth2Request request) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
     protected void finish() {
     }
-
-
 }
+
 
