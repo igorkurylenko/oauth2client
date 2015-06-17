@@ -1,11 +1,11 @@
-package com.igorkurilenko.gwt.oauth2.implicit;
+package com.igorkurilenko.gwt.oauth2;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
 
-public class AuthorizationRequest extends JavaScriptObject {
+public class OAuth2Request extends JavaScriptObject {
 
-    protected AuthorizationRequest() {
+    protected OAuth2Request() {
     }
 
     public final native String getClientId() /*-{
@@ -24,12 +24,12 @@ public class AuthorizationRequest extends JavaScriptObject {
         this.scopes = scopes;
     }-*/;
 
-    public final native int getState() /*-{
-        return this.oauthState;
+    public final native String getState() /*-{
+        return this.state;
     }-*/;
 
-    public final native void setState(int state) /*-{
-        this.oauthState = state;
+    public final native void setState(String state) /*-{
+        this.state = state;
     }-*/;
 
     public final native String getRedirectUri() /*-{

@@ -1,10 +1,10 @@
-package com.igorkurilenko.gwt.oauth2.implicit;
+package com.igorkurilenko.gwt.oauth2;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public class AuthorizationResponse extends JavaScriptObject {
+public class OAuth2Response extends JavaScriptObject {
 
-    protected AuthorizationResponse() {
+    protected OAuth2Response() {
     }
 
     public final native String getAccessToken() /*-{
