@@ -1,4 +1,4 @@
-package com.igorkurilenko.gwt.oauth2;
+package io.itdraft.gwt.oauth2;
 
 import com.google.gwt.core.client.JavaScriptObject;
 

@@ -1,9 +1,8 @@
-package com.igorkurilenko.gwt.oauth2.implicit;
+package io.itdraft.gwt.oauth2.implicit;
 
-import com.igorkurilenko.gwt.oauth2.OAuth2Client;
-import com.igorkurilenko.gwt.oauth2.OAuth2Request;
-import com.igorkurilenko.gwt.oauth2.OAuth2RequestCallback;
-import com.igorkurilenko.gwt.oauth2.OAuth2Response;
+import io.itdraft.gwt.oauth2.OAuth2Client;
+import io.itdraft.gwt.oauth2.OAuth2Request;
+import io.itdraft.gwt.oauth2.OAuth2RequestCallback;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +45,7 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
         var thiz = this;
 
         $wnd.OAUTH2_CLIENT[jsCallbackFunctionName] = $entry(function (hash) {
-            thiz.@com.igorkurilenko.gwt.oauth2.implicit.ImplicitFlowOAuth2Client::onRedirected(Ljava/lang/String;)(hash);
+            thiz.@io.itdraft.gwt.oauth2.implicit.ImplicitFlowOAuth2Client::onRedirected(Ljava/lang/String;)(hash);
         });
     }-*/;
 

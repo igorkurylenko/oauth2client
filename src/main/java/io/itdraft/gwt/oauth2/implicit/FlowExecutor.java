@@ -1,8 +1,8 @@
-package com.igorkurilenko.gwt.oauth2.implicit;
+package io.itdraft.gwt.oauth2.implicit;
 
-import com.igorkurilenko.gwt.oauth2.OAuth2Request;
-import com.igorkurilenko.gwt.oauth2.OAuth2RequestCallback;
-import com.igorkurilenko.gwt.oauth2.OAuth2Response;
+import io.itdraft.gwt.oauth2.OAuth2Request;
+import io.itdraft.gwt.oauth2.OAuth2RequestCallback;
+import io.itdraft.gwt.oauth2.OAuth2Response;
 
 public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
 

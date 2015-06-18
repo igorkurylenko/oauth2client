@@ -1,6 +1,6 @@
-package com.igorkurilenko.gwt.oauth2.implicit;
+package io.itdraft.gwt.oauth2.implicit;
 
-import com.igorkurilenko.gwt.oauth2.OAuth2Response;
+import io.itdraft.gwt.oauth2.OAuth2Response;
 
 public class DefaultOAuth2ResponseFactory implements OAuth2ResponseFactory {
     @Override

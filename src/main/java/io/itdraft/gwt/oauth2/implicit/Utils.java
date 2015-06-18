@@ -1,11 +1,11 @@
-package com.igorkurilenko.gwt.oauth2.implicit;
+package io.itdraft.gwt.oauth2.implicit;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;
-import com.igorkurilenko.gwt.oauth2.OAuth2Request;
-import com.igorkurilenko.gwt.oauth2.OAuth2Response;
+import io.itdraft.gwt.oauth2.OAuth2Request;
+import io.itdraft.gwt.oauth2.OAuth2Response;
 
 import java.util.HashMap;
 import java.util.Map;

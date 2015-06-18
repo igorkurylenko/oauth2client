@@ -4,10 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.igorkurilenko.gwt</groupId>
+    <groupId>io.itdraft.gwt</groupId>
     <artifactId>oauth2client</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <prerequisites>
         <maven>${mavenVersion}</maven>
@@ -19,33 +19,28 @@
         <mavenVersion>3.0</mavenVersion>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.google.gwt</groupId>
-                <artifactId>gwt</artifactId>
-                <version>2.7.0</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <version>3.0.1</version>
-                <scope>provided</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>2.7.0</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>net.ltgt.gwt.maven</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <inherited>false</inherited>
-                <configuration>
-                    <launcherDir>${project.build.directory}/gwt/launcherDir</launcherDir>
-                </configuration>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         <pluginManagement>
@@ -58,50 +53,7 @@
                         <target>1.7</target>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-maven-plugin</artifactId>
-                    <version>9.2.3.v20140905</version>
-                </plugin>
-                <plugin>
-                    <groupId>net.ltgt.gwt.maven</groupId>
-                    <artifactId>gwt-maven-plugin</artifactId>
-                    <version>1.0-beta-2</version>
-                    <extensions>true</extensions>
-                    <configuration>
-                        <sourceLevel>1.7</sourceLevel>
-                        <failOnError>true</failOnError>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>2.4</version>
-                    <executions>
-                        <execution>
-                            <id>attach-sources</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>jar-no-fork</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.tomcat.maven</groupId>
-                    <artifactId>tomcat6-maven-plugin</artifactId>
-                    <version>2.2</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.tomcat.maven</groupId>
-                    <artifactId>tomcat7-maven-plugin</artifactId>
-                    <version>2.2</version>
-                </plugin>
             </plugins>
         </pluginManagement>
     </build>
-    <modules>
-        <module>oauth2client-client</module>
-        <module>oauth2client-shared</module>
-        <module>oauth2client-server</module>
-    </modules>
 </project>

@@ -1,7 +1,7 @@
-package com.igorkurilenko.gwt.oauth2.implicit;
+package io.itdraft.gwt.oauth2.implicit;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.igorkurilenko.gwt.oauth2.OAuth2Request;
+import io.itdraft.gwt.oauth2.OAuth2Request;
 
 public class ThroughPopupWindowExecutor extends FlowExecutor {
 
