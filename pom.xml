@@ -9,6 +9,18 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <name>oauth2client</name>
+    <description>OAuth2 client for implicit grant (GWT)</description>
+    <url>https://github.com/itdraft/oauth2client</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <prerequisites>
         <maven>${mavenVersion}</maven>
     </prerequisites>
