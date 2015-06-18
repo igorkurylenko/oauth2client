@@ -21,6 +21,10 @@
         </license>
     </licenses>
 
+    <scm>
+        <url>https://github.com/itdraft/oauth2client.git</url>
+    </scm>
+
     <prerequisites>
         <maven>${mavenVersion}</maven>
     </prerequisites>
