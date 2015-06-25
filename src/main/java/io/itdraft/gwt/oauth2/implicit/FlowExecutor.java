@@ -1,30 +1,30 @@
 package io.itdraft.gwt.oauth2.implicit;
 
 import io.itdraft.gwt.oauth2.AuthorizationRequest;
-import io.itdraft.gwt.oauth2.OAuth2RequestCallback;
+import io.itdraft.gwt.oauth2.AuthorizationRequestCallback;
 import io.itdraft.gwt.oauth2.AuthorizationResponse;
 
 public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
 
     private boolean inProgress = false;
     private String state;
-    protected AuthUrlFactory authUrlFactory;
-    protected OAuth2ResponseFactory responseFactory;
+    protected AuthorizationUrlFactory authorizationUrlFactory;
+    protected AuthorizationResponseFactory responseFactory;
 
     public FlowExecutor() {
-        this(new DefaultAuthUrlFactory(), new DefaultOAuth2ResponseFactory());
+        this(new DefaultAuthorizationUrlFactory(), new DefaultAuthorizationResponseFactory());
     }
 
-    public FlowExecutor(AuthUrlFactory authUrlFactory, OAuth2ResponseFactory responseFactory) {
-        this.authUrlFactory = authUrlFactory;
+    public FlowExecutor(AuthorizationUrlFactory authorizationUrlFactory, AuthorizationResponseFactory responseFactory) {
+        this.authorizationUrlFactory = authorizationUrlFactory;
         this.responseFactory = responseFactory;
     }
 
-    public void setAuthUrlFactory(AuthUrlFactory authUrlFactory) {
-        this.authUrlFactory = authUrlFactory;
+    public void setAuthorizationUrlFactory(AuthorizationUrlFactory authorizationUrlFactory) {
+        this.authorizationUrlFactory = authorizationUrlFactory;
     }
 
-    public void setResponseFactory(OAuth2ResponseFactory responseFactory) {
+    public void setResponseFactory(AuthorizationResponseFactory responseFactory) {
         this.responseFactory = responseFactory;
     }
 
@@ -48,7 +48,7 @@ public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
     protected abstract void execute(AuthorizationRequest request);
 
     @Override
-    public void finish(String uriFragment, OAuth2RequestCallback callback) {
+    public void finish(String uriFragment, AuthorizationRequestCallback callback) {
         inProgress = false;
 
         processResponse(uriFragment, callback);
@@ -56,13 +56,13 @@ public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
         finish();
     }
 
-    private void processResponse(String uriFragment, OAuth2RequestCallback callback) {
+    private void processResponse(String uriFragment, AuthorizationRequestCallback callback) {
         AuthorizationResponse response = responseFactory.create(uriFragment);
 
         processResponse(response, callback);
     }
 
-    private void processResponse(AuthorizationResponse response, OAuth2RequestCallback callback) {
+    private void processResponse(AuthorizationResponse response, AuthorizationRequestCallback callback) {
         try {
             validateOAuth2Response(response);
 

@@ -2,19 +2,19 @@ package io.itdraft.gwt.oauth2.implicit;
 
 import io.itdraft.gwt.oauth2.OAuth2Client;
 import io.itdraft.gwt.oauth2.AuthorizationRequest;
-import io.itdraft.gwt.oauth2.OAuth2RequestCallback;
+import io.itdraft.gwt.oauth2.AuthorizationRequestCallback;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ImplicitFlowOAuth2Client implements OAuth2Client {
+public class ImplicitGrantOAuth2Client implements OAuth2Client {
 
-    private static Map<String, ImplicitFlowOAuth2Client> INSTANCES = new HashMap<>();
+    private static Map<String, ImplicitGrantOAuth2Client> INSTANCES = new HashMap<>();
     private static final String JS_CALLBACK_FUNCTION_NAME = "oauth2callback";
     private FlowExecutor flowExecutor;
-    private OAuth2RequestCallback callback;
+    private AuthorizationRequestCallback callback;
 
-    private ImplicitFlowOAuth2Client() {
+    private ImplicitGrantOAuth2Client() {
     }
 
     public static OAuth2Client getInstance() {
@@ -22,7 +22,7 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
     }
 
     public static OAuth2Client getInstance(String jsCallbackFunctionName) {
-        ImplicitFlowOAuth2Client result = INSTANCES.get(jsCallbackFunctionName);
+        ImplicitGrantOAuth2Client result = INSTANCES.get(jsCallbackFunctionName);
 
         if (result == null) {
             result = newImplicitFlowOAuth2Client(jsCallbackFunctionName);
@@ -33,9 +33,9 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
     }
 
 
-    private static ImplicitFlowOAuth2Client newImplicitFlowOAuth2Client(
+    private static ImplicitGrantOAuth2Client newImplicitFlowOAuth2Client(
             String jsCallbackFunctionName) {
-        ImplicitFlowOAuth2Client result = new ImplicitFlowOAuth2Client();
+        ImplicitGrantOAuth2Client result = new ImplicitGrantOAuth2Client();
 
         result.bindJsCallbackFunction(jsCallbackFunctionName);
 
@@ -48,13 +48,13 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
         var thiz = this;
 
         $wnd.OAuth2Client[jsCallbackFunctionName] = $entry(function (hash) {
-            thiz.@io.itdraft.gwt.oauth2.implicit.ImplicitFlowOAuth2Client::onRedirected(Ljava/lang/String;)(hash);
+            thiz.@io.itdraft.gwt.oauth2.implicit.ImplicitGrantOAuth2Client::onRedirected(Ljava/lang/String;)(hash);
         });
     }-*/;
 
     @Override
     public void retrieveAccessToken(AuthorizationRequest request,
-                                    OAuth2RequestCallback callback) {
+                                    AuthorizationRequestCallback callback) {
         if (request == null) {
             throw new IllegalArgumentException("OAuth2 request must be not null");
         }
@@ -80,7 +80,7 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
         return new ThroughPopupWindowExecutor();
     }
 
-    public ImplicitFlowOAuth2Client setFlowExecutor(FlowExecutor flowExecutor) {
+    public ImplicitGrantOAuth2Client setFlowExecutor(FlowExecutor flowExecutor) {
         if (isInProgress(flowExecutor)) {
             throw new IllegalStateException("Flow execution is in progress");
         }
@@ -96,7 +96,7 @@ public class ImplicitFlowOAuth2Client implements OAuth2Client {
 
     @Override
     public void refreshAccessToken(AuthorizationRequest request,
-                                   OAuth2RequestCallback callback) {
+                                   AuthorizationRequestCallback callback) {
         throw new UnsupportedOperationException(
                 "Implicit grant flow does not support access token refreshing ");
     }

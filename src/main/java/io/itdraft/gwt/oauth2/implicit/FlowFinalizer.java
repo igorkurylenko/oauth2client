@@ -1,9 +1,9 @@
 package io.itdraft.gwt.oauth2.implicit;
 
-import io.itdraft.gwt.oauth2.OAuth2RequestCallback;
+import io.itdraft.gwt.oauth2.AuthorizationRequestCallback;
 
 public interface FlowFinalizer {
 
-    void finish(String uriFragment, OAuth2RequestCallback callback);
+    void finish(String uriFragment, AuthorizationRequestCallback callback);
 
 }

@@ -52,7 +52,7 @@ public class ThroughPopupWindowExecutor extends FlowExecutor {
     }
 
     protected void execute(AuthorizationRequest request) {
-        String url = authUrlFactory.buildUrl(request);
+        String url = authorizationUrlFactory.buildUrl(request);
 
         popupWindow = openPopupWindow(url, windowHeight, windowWidth);
 

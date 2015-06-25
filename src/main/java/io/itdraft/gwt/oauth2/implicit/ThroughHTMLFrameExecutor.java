@@ -12,7 +12,7 @@ public class ThroughHTMLFrameExecutor extends FlowExecutor {
     }
 
     protected void execute(AuthorizationRequest request) {
-        String url = authUrlFactory.buildUrl(request);
+        String url = authorizationUrlFactory.buildUrl(request);
 
         frame.setUrl(url);
     }

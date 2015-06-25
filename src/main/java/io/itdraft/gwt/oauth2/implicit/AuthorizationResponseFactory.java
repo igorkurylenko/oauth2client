@@ -2,7 +2,7 @@ package io.itdraft.gwt.oauth2.implicit;
 
 import io.itdraft.gwt.oauth2.AuthorizationResponse;
 
-public interface OAuth2ResponseFactory {
+public interface AuthorizationResponseFactory {
 
     AuthorizationResponse create(String uriFragment);
 
