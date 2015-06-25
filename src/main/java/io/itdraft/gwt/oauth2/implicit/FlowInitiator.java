@@ -1,9 +1,9 @@
 package io.itdraft.gwt.oauth2.implicit;
 
-import io.itdraft.gwt.oauth2.OAuth2Request;
+import io.itdraft.gwt.oauth2.AuthorizationRequest;
 
 public interface FlowInitiator {
 
-    void run(OAuth2Request request);
+    void run(AuthorizationRequest request);
 
 }

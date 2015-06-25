@@ -1,7 +1,7 @@
 package io.itdraft.gwt.oauth2.implicit;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import io.itdraft.gwt.oauth2.OAuth2Request;
+import io.itdraft.gwt.oauth2.AuthorizationRequest;
 
 public class ThroughPopupWindowExecutor extends FlowExecutor {
 
@@ -51,7 +51,7 @@ public class ThroughPopupWindowExecutor extends FlowExecutor {
         this.windowHeight = windowHeight;
     }
 
-    protected void execute(OAuth2Request request) {
+    protected void execute(AuthorizationRequest request) {
         String url = authUrlFactory.buildUrl(request);
 
         popupWindow = openPopupWindow(url, windowHeight, windowWidth);

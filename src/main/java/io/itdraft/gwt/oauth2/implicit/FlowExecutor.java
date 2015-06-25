@@ -1,8 +1,8 @@
 package io.itdraft.gwt.oauth2.implicit;
 
-import io.itdraft.gwt.oauth2.OAuth2Request;
+import io.itdraft.gwt.oauth2.AuthorizationRequest;
 import io.itdraft.gwt.oauth2.OAuth2RequestCallback;
-import io.itdraft.gwt.oauth2.OAuth2Response;
+import io.itdraft.gwt.oauth2.AuthorizationResponse;
 
 public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
 
@@ -29,7 +29,7 @@ public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
     }
 
     @Override
-    public void run(OAuth2Request request) {
+    public void run(AuthorizationRequest request) {
         if (isInProgress()) {
             throw new IllegalStateException("Authorization is in progress");
         }
@@ -45,7 +45,7 @@ public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
         return inProgress;
     }
 
-    protected abstract void execute(OAuth2Request request);
+    protected abstract void execute(AuthorizationRequest request);
 
     @Override
     public void finish(String uriFragment, OAuth2RequestCallback callback) {
@@ -57,12 +57,12 @@ public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
     }
 
     private void processResponse(String uriFragment, OAuth2RequestCallback callback) {
-        OAuth2Response response = responseFactory.create(uriFragment);
+        AuthorizationResponse response = responseFactory.create(uriFragment);
 
         processResponse(response, callback);
     }
 
-    private void processResponse(OAuth2Response response, OAuth2RequestCallback callback) {
+    private void processResponse(AuthorizationResponse response, OAuth2RequestCallback callback) {
         try {
             validateOAuth2Response(response);
 
@@ -73,7 +73,7 @@ public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
         }
     }
 
-    private void validateOAuth2Response(OAuth2Response response) {
+    private void validateOAuth2Response(AuthorizationResponse response) {
         String stateFomResponse = response.getState();
 
         if (stateFomResponse == null) {

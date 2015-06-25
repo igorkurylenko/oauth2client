@@ -1,9 +1,9 @@
 package io.itdraft.gwt.oauth2.implicit;
 
-import io.itdraft.gwt.oauth2.OAuth2Response;
+import io.itdraft.gwt.oauth2.AuthorizationResponse;
 
 public interface OAuth2ResponseFactory {
 
-    OAuth2Response create(String uriFragment);
+    AuthorizationResponse create(String uriFragment);
 
 }

@@ -1,10 +1,10 @@
 package io.itdraft.gwt.oauth2.implicit;
 
-import io.itdraft.gwt.oauth2.OAuth2Request;
+import io.itdraft.gwt.oauth2.AuthorizationRequest;
 
 public class DefaultAuthUrlFactory implements AuthUrlFactory {
 
-    public String buildUrl(OAuth2Request request) {
+    public String buildUrl(AuthorizationRequest request) {
         return Utils.buildRetrieveAccessTokenUrl(request);
     }
 }

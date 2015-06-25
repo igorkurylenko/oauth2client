@@ -1,9 +1,9 @@
 package io.itdraft.gwt.oauth2.implicit;
 
-import io.itdraft.gwt.oauth2.OAuth2Request;
+import io.itdraft.gwt.oauth2.AuthorizationRequest;
 
 public interface AuthUrlFactory {
 
-    String buildUrl(OAuth2Request request);
+    String buildUrl(AuthorizationRequest request);
 
 }

@@ -4,8 +4,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;
-import io.itdraft.gwt.oauth2.OAuth2Request;
-import io.itdraft.gwt.oauth2.OAuth2Response;
+import io.itdraft.gwt.oauth2.AuthorizationRequest;
+import io.itdraft.gwt.oauth2.AuthorizationResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +18,7 @@ class Utils {
     private Utils() {
     }
 
-    public static String buildRetrieveAccessTokenUrl(OAuth2Request request) {
+    public static String buildRetrieveAccessTokenUrl(AuthorizationRequest request) {
         String authEndpointUrl = request.getAuthEndpointUrl();
         String clientId = request.getClientId();
         String redirectUri = request.getRedirectUri();
@@ -61,12 +61,12 @@ class Utils {
         return decodeURIComponent(s);
     }-*/;
 
-    public static OAuth2Response uriFragmentToOAuth2Response(String hash) {
+    public static AuthorizationResponse uriFragmentToOAuth2Response(String hash) {
         String query = getQuery(hash);
 
         Map<String, String> params = parseUriFragment(query);
 
-        OAuth2Response authResponse = JavaScriptObject.createObject().cast();
+        AuthorizationResponse authResponse = JavaScriptObject.createObject().cast();
         authResponse.setAccessToken(params.get("access_token"));
         authResponse.setExpiresIn(params.get("expires_in"));
         authResponse.setState(params.get("state"));

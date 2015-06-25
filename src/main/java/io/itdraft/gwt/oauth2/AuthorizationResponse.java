@@ -2,9 +2,9 @@ package io.itdraft.gwt.oauth2;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public class OAuth2Response extends JavaScriptObject {
+public class AuthorizationResponse extends JavaScriptObject {
 
-    protected OAuth2Response() {
+    protected AuthorizationResponse() {
     }
 
     public final native String getAccessToken() /*-{
