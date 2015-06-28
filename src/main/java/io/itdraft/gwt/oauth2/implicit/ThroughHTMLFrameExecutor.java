@@ -1,7 +1,7 @@
 package io.itdraft.gwt.oauth2.implicit;
 
 import com.google.gwt.user.client.ui.Frame;
-import io.itdraft.gwt.oauth2.AuthorizationRequest;
+import io.itdraft.gwt.oauth2.AccessTokenRequest;
 
 public class ThroughHTMLFrameExecutor extends FlowExecutor {
 
@@ -11,7 +11,7 @@ public class ThroughHTMLFrameExecutor extends FlowExecutor {
         this.frame = frame;
     }
 
-    protected void execute(AuthorizationRequest request) {
+    protected void execute(AccessTokenRequest request) {
         String url = authorizationUrlFactory.buildUrl(request);
 
         frame.setUrl(url);

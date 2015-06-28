@@ -1,7 +1,7 @@
 package io.itdraft.gwt.oauth2.implicit;
 
-import io.itdraft.gwt.oauth2.AuthorizationRequest;
-import io.itdraft.gwt.oauth2.AuthorizationRequestCallback;
+import io.itdraft.gwt.oauth2.AccessTokenRequest;
+import io.itdraft.gwt.oauth2.AccessTokenCallback;
 import io.itdraft.gwt.oauth2.AuthorizationResponse;
 
 public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
@@ -29,7 +29,7 @@ public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
     }
 
     @Override
-    public void run(AuthorizationRequest request) {
+    public void run(AccessTokenRequest request) {
         if (isInProgress()) {
             throw new IllegalStateException("Authorization is in progress");
         }
@@ -45,10 +45,10 @@ public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
         return inProgress;
     }
 
-    protected abstract void execute(AuthorizationRequest request);
+    protected abstract void execute(AccessTokenRequest request);
 
     @Override
-    public void finish(String uriFragment, AuthorizationRequestCallback callback) {
+    public void finish(String uriFragment, AccessTokenCallback callback) {
         inProgress = false;
 
         processResponse(uriFragment, callback);
@@ -56,13 +56,13 @@ public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
         finish();
     }
 
-    private void processResponse(String uriFragment, AuthorizationRequestCallback callback) {
+    private void processResponse(String uriFragment, AccessTokenCallback callback) {
         AuthorizationResponse response = responseFactory.create(uriFragment);
 
         processResponse(response, callback);
     }
 
-    private void processResponse(AuthorizationResponse response, AuthorizationRequestCallback callback) {
+    private void processResponse(AuthorizationResponse response, AccessTokenCallback callback) {
         try {
             validateOAuth2Response(response);
 

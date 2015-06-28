@@ -1,8 +1,8 @@
 package io.itdraft.gwt.oauth2.implicit;
 
 import io.itdraft.gwt.oauth2.OAuth2Client;
-import io.itdraft.gwt.oauth2.AuthorizationRequest;
-import io.itdraft.gwt.oauth2.AuthorizationRequestCallback;
+import io.itdraft.gwt.oauth2.AccessTokenRequest;
+import io.itdraft.gwt.oauth2.AccessTokenCallback;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ public class ImplicitGrantOAuth2Client implements OAuth2Client {
     private static Map<String, ImplicitGrantOAuth2Client> INSTANCES = new HashMap<>();
     private static final String JS_CALLBACK_FUNCTION_NAME = "oauth2callback";
     private FlowExecutor flowExecutor;
-    private AuthorizationRequestCallback callback;
+    private AccessTokenCallback callback;
 
     private ImplicitGrantOAuth2Client() {
     }
@@ -48,13 +48,13 @@ public class ImplicitGrantOAuth2Client implements OAuth2Client {
         var thiz = this;
 
         $wnd.OAuth2Client[jsCallbackFunctionName] = $entry(function (hash) {
-            thiz.@io.itdraft.gwt.oauth2.implicit.ImplicitGrantOAuth2Client::onRedirected(Ljava/lang/String;)(hash);
+            thiz.@io.itdraft.gwt.oauth2.implicit.ImplicitGrantOAuth2Client::callback(Ljava/lang/String;)(hash);
         });
     }-*/;
 
     @Override
-    public void retrieveAccessToken(AuthorizationRequest request,
-                                    AuthorizationRequestCallback callback) {
+    public void retrieveAccessToken(AccessTokenRequest request,
+                                    AccessTokenCallback callback) {
         if (request == null) {
             throw new IllegalArgumentException("OAuth2 request must be not null");
         }
@@ -94,14 +94,13 @@ public class ImplicitGrantOAuth2Client implements OAuth2Client {
         return flowExecutor != null && flowExecutor.isInProgress();
     }
 
-    @Override
-    public void refreshAccessToken(AuthorizationRequest request,
-                                   AuthorizationRequestCallback callback) {
+    private void refreshAccessToken(AccessTokenRequest request,
+                                   AccessTokenCallback callback) {
         throw new UnsupportedOperationException(
-                "Implicit grant flow does not support access token refreshing ");
+                "Not implemented yet.");
     }
 
-    private void onRedirected(String uriFragment) {
+    private void callback(String uriFragment) {
         if (callback == null) {
             throw new IllegalStateException("OAuth2 request was not sent");
         }

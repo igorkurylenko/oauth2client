@@ -6,22 +6,22 @@ import com.google.gwt.core.client.JsArrayString;
 import java.util.Random;
 import java.util.Set;
 
-public class AuthorizationRequest extends JavaScriptObject {
+public class AccessTokenRequest extends JavaScriptObject {
 
-    protected AuthorizationRequest() {
+    protected AccessTokenRequest() {
     }
 
-    public static AuthorizationRequest create(String authEndpointUrl, String clientId,
+    public static AccessTokenRequest create(String authEndpointUrl, String clientId,
                                               String redirectUri, Set<String> scopes) {
         String state = new Random().nextInt() + "";
 
         return create(authEndpointUrl, clientId, redirectUri, scopes, state);
     }
 
-    public static AuthorizationRequest create(String authEndpointUrl, String clientId,
+    public static AccessTokenRequest create(String authEndpointUrl, String clientId,
                                               String redirectUri, Set<String> scopes,
                                               String state) {
-        AuthorizationRequest result = JavaScriptObject.createObject().cast();
+        AccessTokenRequest result = JavaScriptObject.createObject().cast();
 
         result.setAuthEndpointUrl(authEndpointUrl);
         result.setClientId(clientId);

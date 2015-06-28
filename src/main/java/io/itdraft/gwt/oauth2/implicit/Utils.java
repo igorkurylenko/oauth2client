@@ -4,7 +4,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;
-import io.itdraft.gwt.oauth2.AuthorizationRequest;
+import io.itdraft.gwt.oauth2.AccessTokenRequest;
 import io.itdraft.gwt.oauth2.AuthorizationResponse;
 
 import java.util.HashMap;
@@ -18,7 +18,7 @@ class Utils {
     private Utils() {
     }
 
-    public static String buildRetrieveAccessTokenUrl(AuthorizationRequest request) {
+    public static String buildRetrieveAccessTokenUrl(AccessTokenRequest request) {
         String authEndpointUrl = request.getAuthEndpointUrl();
         String clientId = request.getClientId();
         String redirectUri = request.getRedirectUri();
