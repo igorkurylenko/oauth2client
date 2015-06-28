@@ -1,45 +1,43 @@
 package io.itdraft.gwt.oauth2.implicit;
 
-import io.itdraft.gwt.oauth2.OAuth2Client;
-import io.itdraft.gwt.oauth2.AccessTokenRequest;
-import io.itdraft.gwt.oauth2.AccessTokenCallback;
+import io.itdraft.gwt.oauth2.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
-public class ImplicitGrantOAuth2Client implements OAuth2Client {
+public class ImplicitGrantOAuth2Client extends OAuth2Client {
 
-    private static Map<String, ImplicitGrantOAuth2Client> INSTANCES = new HashMap<>();
-    private static final String JS_CALLBACK_FUNCTION_NAME = "oauth2callback";
+    private static Map<OAuth2ClientConfig, OAuth2Client> INSTANCES = new HashMap<>();
+    private final OAuth2ClientConfig config;
     private FlowExecutor flowExecutor;
     private AccessTokenCallback callback;
 
-    private ImplicitGrantOAuth2Client() {
+    public static OAuth2Client getInstance(String clientId, String redirectUri,
+                                           String authEndpointUrl) {
+        return getInstance(new OAuth2ClientConfig(clientId, redirectUri, authEndpointUrl));
     }
 
-    public static OAuth2Client getInstance() {
-        return getInstance(JS_CALLBACK_FUNCTION_NAME);
+    public static OAuth2Client getInstance(String clientId, String redirectUri,
+                                          String authEndpointUrl, String jsCallbackFunctionName) {
+        return getInstance(new OAuth2ClientConfig(clientId, redirectUri,
+                authEndpointUrl, jsCallbackFunctionName));
     }
 
-    public static OAuth2Client getInstance(String jsCallbackFunctionName) {
-        ImplicitGrantOAuth2Client result = INSTANCES.get(jsCallbackFunctionName);
+    public static OAuth2Client getInstance(OAuth2ClientConfig config) {
+        OAuth2Client result = INSTANCES.get(config);
 
         if (result == null) {
-            result = newImplicitFlowOAuth2Client(jsCallbackFunctionName);
-            INSTANCES.put(jsCallbackFunctionName, result);
+            result = new CachedOAuth2Client(new ImplicitGrantOAuth2Client(config));
+            INSTANCES.put(config, result);
         }
 
         return result;
     }
 
-
-    private static ImplicitGrantOAuth2Client newImplicitFlowOAuth2Client(
-            String jsCallbackFunctionName) {
-        ImplicitGrantOAuth2Client result = new ImplicitGrantOAuth2Client();
-
-        result.bindJsCallbackFunction(jsCallbackFunctionName);
-
-        return result;
+    private ImplicitGrantOAuth2Client(OAuth2ClientConfig config) {
+        this.config = config;
+        bindJsCallbackFunction(config.getJsCallbackFunctionName());
     }
 
     private native void bindJsCallbackFunction(String jsCallbackFunctionName) /*-{
@@ -53,16 +51,12 @@ public class ImplicitGrantOAuth2Client implements OAuth2Client {
     }-*/;
 
     @Override
-    public void retrieveAccessToken(AccessTokenRequest request,
-                                    AccessTokenCallback callback) {
-        if (request == null) {
-            throw new IllegalArgumentException("OAuth2 request must be not null");
-        }
+    public OAuth2ClientConfig getConfig() {
+        return config;
+    }
 
-        if (callback == null) {
-            throw new IllegalArgumentException("Auth2 request callback must be not null");
-        }
-
+    protected void doRetrieveAccessToken(Set<String> scopes,
+                                         AccessTokenCallback callback) {
         if (this.callback != null) {
             throw new IllegalStateException("Access token is being retrieved");
         }
@@ -73,31 +67,17 @@ public class ImplicitGrantOAuth2Client implements OAuth2Client {
             flowExecutor = createDefaultFlowExecutor();
         }
 
+        AccessTokenRequest request = AccessTokenRequest.create(
+                config.getAuthEndpointUrl(),
+                config.getClientId(),
+                config.getRedirectUri(),
+                scopes);
+
         flowExecutor.run(request);
     }
 
     public static FlowExecutor createDefaultFlowExecutor() {
         return new ThroughPopupWindowExecutor();
-    }
-
-    public ImplicitGrantOAuth2Client setFlowExecutor(FlowExecutor flowExecutor) {
-        if (isInProgress(flowExecutor)) {
-            throw new IllegalStateException("Flow execution is in progress");
-        }
-
-        this.flowExecutor = flowExecutor;
-
-        return this;
-    }
-
-    private boolean isInProgress(FlowExecutor flowExecutor) {
-        return flowExecutor != null && flowExecutor.isInProgress();
-    }
-
-    private void refreshAccessToken(AccessTokenRequest request,
-                                   AccessTokenCallback callback) {
-        throw new UnsupportedOperationException(
-                "Not implemented yet.");
     }
 
     private void callback(String uriFragment) {

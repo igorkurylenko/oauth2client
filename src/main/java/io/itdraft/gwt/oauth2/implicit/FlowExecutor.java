@@ -1,5 +1,6 @@
 package io.itdraft.gwt.oauth2.implicit;
 
+import io.itdraft.gwt.oauth2.AccessToken;
 import io.itdraft.gwt.oauth2.AccessTokenRequest;
 import io.itdraft.gwt.oauth2.AccessTokenCallback;
 import io.itdraft.gwt.oauth2.AuthorizationResponse;
@@ -66,11 +67,16 @@ public abstract class FlowExecutor implements FlowInitiator, FlowFinalizer {
         try {
             validateOAuth2Response(response);
 
-            callback.onSuccess(response);
+            callback.onSuccess(createAccessToken(response));
 
         } catch (Exception x) {
             callback.onFailure(x);
         }
+    }
+
+    private AccessToken createAccessToken(AuthorizationResponse response) {
+        return new AccessToken(response.getAccessToken(),
+                Integer.parseInt(response.getExpiresIn()));
     }
 
     private void validateOAuth2Response(AuthorizationResponse response) {
