@@ -1,6 +1,7 @@
 package io.itdraft.gwt.oauth2;
 
 import io.itdraft.gwt.oauth2.storage.AccessTokenStorage;
+
 import java.util.Set;
 
 
@@ -15,7 +16,8 @@ public class WithStorage extends OAuth2ClientDecorator {
         String key = buildStorageKey();
 
         AccessToken accessToken = storage.get(key);
-        if (accessToken != null) {
+
+        if (isNiceAccessToken(accessToken)) {
             callback.onSuccess(accessToken);
 
         } else {
@@ -23,6 +25,10 @@ public class WithStorage extends OAuth2ClientDecorator {
 
             super.doRetrieveAccessToken(wrappedCallback);
         }
+    }
+
+    public boolean isNiceAccessToken(AccessToken accessToken) {
+        return accessToken != null && !accessToken.isExpired();
     }
 
     private AccessTokenCallback wrapCallback(final AccessTokenCallback callback, final String key) {

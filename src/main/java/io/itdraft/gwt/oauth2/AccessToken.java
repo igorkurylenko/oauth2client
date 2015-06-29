@@ -23,7 +23,7 @@ public class AccessToken {
         this.dateCreated = dateCreated;
     }
 
-    public long getExpiresIn() {
+    public int getExpiresIn() {
         return expiresIn;
     }
 
@@ -36,16 +36,21 @@ public class AccessToken {
     }
 
     public Date getExpirationDate() {
-        long expirationTime = dateCreated.getTime() + expiresIn * 1000;
+        long expirationTime = getExpirationTime();
 
         return new Date(expirationTime);
     }
 
-    public boolean isExpired() {
-        Date curDate = new Date();
-        Date expirationDate = getExpirationDate();
+    public long getExpirationTime() {
+        return dateCreated.getTime() + expiresIn * 1000;
+    }
 
-        return curDate.after(expirationDate);
+    public boolean isExpired() {
+        return getTimeLeftInSeconds() == 0;
+    }
+
+    public long getTimeLeftInSeconds() {
+        return Math.max(0, (getExpirationTime() - dateCreated.getTime()) / 1000);
     }
 
     public static AccessToken deserialize(String serializedAccessToken) {
