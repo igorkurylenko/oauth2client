@@ -1,56 +1,53 @@
 package io.itdraft.gwt.oauth2;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class OAuth2ClientConfig {
-    private static final String JS_CALLBACK_FUNCTION_NAME = "oauth2callback";
-    private String clientId;
-    private String redirectUri;
-    private String authEndpointUrl;
-    private String jsCallbackFunctionName;
+    public static final String DEFAULT_JS_CALLBACK_FN_NAME = "oauth2callback";
+    private final Set<String> scopes;
+    private final String clientId;
+    private final String redirectUri;
+    private final String authEndpointUrl;
+    private final String jsCallbackFunctionName;
 
-    public OAuth2ClientConfig(String clientId, String redirectUri, String authEndpointUrl) {
-        this(authEndpointUrl, clientId, redirectUri, JS_CALLBACK_FUNCTION_NAME);
+    public OAuth2ClientConfig(String clientId,
+                              String redirectUri,
+                              String authEndpointUrl,
+                              Set<String> scopes) {
+        this(authEndpointUrl, clientId, redirectUri, scopes, DEFAULT_JS_CALLBACK_FN_NAME);
     }
 
-    public OAuth2ClientConfig(String clientId, String redirectUri,
-                              String authEndpointUrl, String jsCallbackFunctionName) {
+    public OAuth2ClientConfig(String clientId,
+                              String redirectUri,
+                              String authEndpointUrl,
+                              Set<String> scopes,
+                              String jsCallbackFunctionName) {
         this.clientId = clientId;
         this.redirectUri = redirectUri;
         this.authEndpointUrl = authEndpointUrl;
         this.jsCallbackFunctionName = jsCallbackFunctionName;
+        this.scopes = scopes;
     }
 
     public String getClientId() {
         return this.clientId;
     }
 
-    public void setClientId(String clientId){
-        this.clientId = clientId;
-    }
-
     public String getRedirectUri() {
         return this.redirectUri;
-    }
-
-    public void setRedirectUri(String redirectUri) {
-        this.redirectUri = redirectUri;
     }
 
     public String getAuthEndpointUrl() {
         return this.authEndpointUrl;
     }
 
-    public void setAuthEndpointUrl(String authEndpointUrl) {
-        this.authEndpointUrl = authEndpointUrl;
-    }
-
     public String getJsCallbackFunctionName() {
         return this.jsCallbackFunctionName;
     }
 
-    public void setJsCallbackFunctionName(String jsCallbackFunctionName) {
-        this.jsCallbackFunctionName = jsCallbackFunctionName;
+    public Set<String> getScopes() {
+        return scopes;
     }
 
     @Override
@@ -58,7 +55,8 @@ public class OAuth2ClientConfig {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OAuth2ClientConfig that = (OAuth2ClientConfig) o;
-        return Objects.equals(clientId, that.clientId) &&
+        return Objects.equals(scopes, that.scopes) &&
+                Objects.equals(clientId, that.clientId) &&
                 Objects.equals(redirectUri, that.redirectUri) &&
                 Objects.equals(authEndpointUrl, that.authEndpointUrl) &&
                 Objects.equals(jsCallbackFunctionName, that.jsCallbackFunctionName);
@@ -66,6 +64,6 @@ public class OAuth2ClientConfig {
 
     @Override
     public int hashCode() {
-        return Objects.hash(clientId, redirectUri, authEndpointUrl, jsCallbackFunctionName);
+        return Objects.hash(scopes, clientId, redirectUri, authEndpointUrl, jsCallbackFunctionName);
     }
 }

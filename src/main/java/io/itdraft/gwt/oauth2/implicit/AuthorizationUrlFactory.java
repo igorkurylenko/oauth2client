@@ -1,9 +1,13 @@
 package io.itdraft.gwt.oauth2.implicit;
 
-import io.itdraft.gwt.oauth2.AccessTokenRequest;
+import java.util.Set;
 
 public interface AuthorizationUrlFactory {
 
-    String buildUrl(AccessTokenRequest request);
+    String buildUrl(String authorizationEndpointUrl,
+                    String clientId,
+                    String redirectUri,
+                    Set<String> scopes,
+                    String state);
 
 }
