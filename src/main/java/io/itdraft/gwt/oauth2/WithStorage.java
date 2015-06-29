@@ -27,6 +27,15 @@ public class WithStorage extends OAuth2ClientDecorator {
         }
     }
 
+    @Override
+    public void refreshAccessToken(AccessTokenCallback callback) {
+        String key = buildStorageKey();
+
+        AccessTokenCallback wrappedCallback = wrapCallback(callback, key);
+
+        super.refreshAccessToken(wrappedCallback);
+    }
+
     public boolean isNiceAccessToken(AccessToken accessToken) {
         return accessToken != null && !accessToken.isExpired();
     }

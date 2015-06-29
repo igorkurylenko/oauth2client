@@ -50,7 +50,7 @@ public class AccessToken {
     }
 
     public long getTimeLeftInSeconds() {
-        return Math.max(0, (getExpirationTime() - dateCreated.getTime()) / 1000);
+        return Math.max(0, (getExpirationTime() - new Date().getTime()) / 1000);
     }
 
     public static AccessToken deserialize(String serializedAccessToken) {
