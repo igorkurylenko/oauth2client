@@ -49,6 +49,10 @@ public class AccessToken {
     }
 
     public static AccessToken deserialize(String serializedAccessToken) {
+        if (serializedAccessToken == null) {
+            return null;
+        }
+
         try {
             String[] props = serializedAccessToken.split(DELIMITER);
             Date dateCreated = new Date(Long.parseLong(props[0]));

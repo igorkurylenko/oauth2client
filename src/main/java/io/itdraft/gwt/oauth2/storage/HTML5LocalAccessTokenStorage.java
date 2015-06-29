@@ -26,7 +26,8 @@ class HTML5LocalAccessTokenStorage implements AccessTokenStorage {
 
         String serializedAccessToken = storageMap.get(key);
 
-        return AccessToken.deserialize(serializedAccessToken);
+        return serializedAccessToken == null ? null :
+                AccessToken.deserialize(serializedAccessToken);
     }
 
     public void put(String key, AccessToken accessToken) {
