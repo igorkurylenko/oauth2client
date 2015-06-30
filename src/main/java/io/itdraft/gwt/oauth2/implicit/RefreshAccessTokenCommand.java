@@ -52,6 +52,10 @@ class RefreshAccessTokenCommand extends AccessTokenCommand {
 
         RootPanel.get().remove(frame);
     }
+
+    public void cancel() {
+        finish();
+    }
 }
 
 

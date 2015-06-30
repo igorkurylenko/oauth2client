@@ -37,8 +37,12 @@ abstract class AccessTokenCommand {
     public void processOAuth2ProviderResponse(OAuth2ProviderResponse response) {
         if (!isEmpty(response.getError())) {
             callback.onFailure(createOAuth2ProviderErrorReason(response));
-        } else {
+
+        } else if(!isEmpty(response.getAccessToken())) {
             callback.onSuccess(createAccessToken(response));
+
+        }else{
+            callback.onFailure(FailureReason.UNDEFINED_OAUTH2_PROVIDER_RESPONSE);
         }
 
         finish();
@@ -68,4 +72,5 @@ abstract class AccessTokenCommand {
 
     protected abstract void finish();
 
+    public abstract void cancel();
 }

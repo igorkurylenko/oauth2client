@@ -9,13 +9,15 @@ public class WithKeyPrefix extends AccessTokenStorageDecorator {
         super(storage);
     }
 
-    @Override
     public AccessToken get(String key) {
         return super.get(KEY_PREFIX + key);
     }
 
-    @Override
     public void put(String key, AccessToken accessToken) {
         super.put(KEY_PREFIX + key, accessToken);
+    }
+
+    public void remove(String key) {
+        super.remove(KEY_PREFIX + key);
     }
 }

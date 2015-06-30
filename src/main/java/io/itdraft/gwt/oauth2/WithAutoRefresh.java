@@ -11,8 +11,13 @@ public class WithAutoRefresh extends OAuth2ClientDecorator {
         super(decorated);
     }
 
-    public void refreshAccessToken(AccessTokenCallback callback) {
-        super.refreshAccessToken(wrapCallback(callback));
+    public void doRefreshAccessToken(AccessTokenCallback callback) {
+        super.doRefreshAccessToken(wrapCallback(callback));
+    }
+
+    public void reset() {
+        refreshTimer.reset();
+        super.reset();
     }
 
     public void doRequestAccessToken(AccessTokenCallback callback) {
@@ -21,12 +26,10 @@ public class WithAutoRefresh extends OAuth2ClientDecorator {
 
     private AccessTokenCallback wrapCallback(final AccessTokenCallback callback) {
         return new AccessTokenCallback() {
-            @Override
             protected void doOnFailure(FailureReason reason) {
                 callback.onFailure(reason);
             }
 
-            @Override
             protected void doOnSuccess(AccessToken token) {
                 refreshTimer.scheduleNextRefresh(token);
 
@@ -36,17 +39,14 @@ public class WithAutoRefresh extends OAuth2ClientDecorator {
     }
 
     class RefreshTimer extends Timer {
-        final AccessTokenCallback EMPTY_CALLBACK = new AccessTokenCallback() {
-            protected void doOnFailure(FailureReason reason) {
-            }
-
-            protected void doOnSuccess(AccessToken token) {
-            }
-        };
         AccessToken accessTokenScheduledFor;
 
+        public void run() {
+            doRefreshAccessToken(EMPTY_CALLBACK);
+        }
+
         void scheduleNextRefresh(AccessToken accessToken) {
-            if (!accessToken.equals(accessTokenScheduledFor)) {
+            if (accessToken != null && !accessToken.equals(accessTokenScheduledFor)) {
                 cancel();
 
                 accessTokenScheduledFor = accessToken;
@@ -55,16 +55,16 @@ public class WithAutoRefresh extends OAuth2ClientDecorator {
             }
         }
 
+        void reset() {
+            cancel();
+            accessTokenScheduledFor = null;
+        }
+
         private int getDelayMillis() {
             int result = accessTokenScheduledFor.getTimeLeftInSeconds() * 1000
                     - APPROXIMATE_TIME_TO_REFRESH_TOKEN_MILLIS;
 
             return result < APPROXIMATE_TIME_TO_REFRESH_TOKEN_MILLIS ? 0 : result;
-        }
-
-        @Override
-        public void run() {
-            refreshAccessToken(EMPTY_CALLBACK);
         }
     }
 }

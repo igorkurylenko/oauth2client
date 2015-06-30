@@ -4,19 +4,21 @@ import io.itdraft.gwt.oauth2.AccessToken;
 
 public abstract class AccessTokenStorageDecorator implements AccessTokenStorage {
 
-    protected final AccessTokenStorage decoratedStorage;
+    protected final AccessTokenStorage decorated;
 
-    protected AccessTokenStorageDecorator(AccessTokenStorage decoratedStorage) {
-        this.decoratedStorage = decoratedStorage;
+    protected AccessTokenStorageDecorator(AccessTokenStorage decorated) {
+        this.decorated = decorated;
     }
 
-    @Override
     public AccessToken get(String key) {
-        return decoratedStorage.get(key);
+        return decorated.get(key);
     }
 
-    @Override
     public void put(String key, AccessToken accessToken) {
-        decoratedStorage.put(key, accessToken);
+        decorated.put(key, accessToken);
+    }
+
+    public void remove(String key) {
+        decorated.remove(key);
     }
 }

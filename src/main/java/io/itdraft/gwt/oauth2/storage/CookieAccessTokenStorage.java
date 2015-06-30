@@ -19,5 +19,10 @@ class CookieAccessTokenStorage implements AccessTokenStorage {
 
         Cookies.setCookie(key, serializedToken, expirationDate);
     }
+
+    @Override
+    public void remove(String key) {
+        Cookies.removeCookie(key);
+    }
 }
 

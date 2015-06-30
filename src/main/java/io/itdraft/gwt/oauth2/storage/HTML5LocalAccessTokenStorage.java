@@ -37,4 +37,11 @@ class HTML5LocalAccessTokenStorage implements AccessTokenStorage {
 
         storageMap.put(key, serializedAccessToken);
     }
+
+    @Override
+    public void remove(String key) {
+        ensureLocalStorageSupported();
+
+        storageMap.remove(key);
+    }
 }

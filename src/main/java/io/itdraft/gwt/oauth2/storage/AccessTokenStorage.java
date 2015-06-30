@@ -13,4 +13,6 @@ public interface AccessTokenStorage {
     AccessToken get(String key);
 
     void put(String key, AccessToken accessToken);
+
+    void remove(String key);
 }

@@ -6,7 +6,7 @@ import io.itdraft.gwt.oauth2.AccessTokenCallback;
 import io.itdraft.gwt.oauth2.FailureReason;
 import io.itdraft.gwt.oauth2.OAuth2ClientConfig;
 
-class RetrieveAccessTokenCommand extends AccessTokenCommand {
+class RequestAccessTokenCommand extends AccessTokenCommand {
 
     public static final int CHECK_POPUP_CLOSED_DELAY_MS = 200;
     private boolean inProgress;
@@ -36,15 +36,15 @@ class RetrieveAccessTokenCommand extends AccessTokenCommand {
     private int windowWidth;
     private int windowHeight;
 
-    public RetrieveAccessTokenCommand(OAuth2ClientConfig config,
-                                      AccessTokenCallback callback) {
+    public RequestAccessTokenCommand(OAuth2ClientConfig config,
+                                     AccessTokenCallback callback) {
         this(config, callback, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
     }
 
-    public RetrieveAccessTokenCommand(OAuth2ClientConfig config,
-                                      AccessTokenCallback callback,
-                                      int windowWidth,
-                                      int windowHeight) {
+    public RequestAccessTokenCommand(OAuth2ClientConfig config,
+                                     AccessTokenCallback callback,
+                                     int windowWidth,
+                                     int windowHeight) {
         super(config, callback);
 
         this.windowWidth = windowWidth;
@@ -111,6 +111,10 @@ class RetrieveAccessTokenCommand extends AccessTokenCommand {
     protected void finish() {
         inProgress = false;
         popupWindow.close();
+    }
+
+    public void cancel() {
+        finish();
     }
 }
 

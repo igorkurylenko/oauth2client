@@ -8,6 +8,8 @@ public interface FailureReason {
     StateParameterMismatch STATE_PARAMETER_MISMATCH = new StateParameterMismatch();
     ResponseWithoutStateParameter RESPONSE_WITHOUT_STATE_PARAMETER =
             new ResponseWithoutStateParameter();
+    UndefinedOAuth2ProviderResponse UNDEFINED_OAUTH2_PROVIDER_RESPONSE =
+            new UndefinedOAuth2ProviderResponse();
 
 
     class RefreshTokenTimeout implements FailureReason {
@@ -23,6 +25,9 @@ public interface FailureReason {
     }
 
     class StateParameterMismatch implements FailureReason {
+    }
+
+    class UndefinedOAuth2ProviderResponse implements FailureReason {
     }
 
     class OAuth2ProviderErrorResponse implements FailureReason {
