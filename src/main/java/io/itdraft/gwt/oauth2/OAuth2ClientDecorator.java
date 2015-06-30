@@ -7,8 +7,8 @@ public abstract class OAuth2ClientDecorator extends OAuth2Client {
         this.decorated = decorated;
     }
 
-    public void doRetrieveAccessToken(AccessTokenCallback callback) {
-        decorated.doRetrieveAccessToken(callback);
+    public void doRequestAccessToken(AccessTokenCallback callback) {
+        decorated.doRequestAccessToken(callback);
     }
 
     public void refreshAccessToken(AccessTokenCallback callback) {

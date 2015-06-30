@@ -49,8 +49,10 @@ public class AccessToken {
         return getTimeLeftInSeconds() == 0;
     }
 
-    public long getTimeLeftInSeconds() {
-        return Math.max(0, (getExpirationTime() - new Date().getTime()) / 1000);
+    public int getTimeLeftInSeconds() {
+        long curTime = new Date().getTime();
+        long timeLeftSeconds = (int) Math.max(0, (getExpirationTime() - curTime) / 1000);
+        return timeLeftSeconds < Integer.MAX_VALUE ? (int) timeLeftSeconds : Integer.MAX_VALUE;
     }
 
     public static AccessToken deserialize(String serializedAccessToken) {

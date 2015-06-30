@@ -4,7 +4,7 @@ import io.itdraft.gwt.oauth2.*;
 
 import static io.itdraft.gwt.oauth2.implicit.Utils.isEmpty;
 
-public abstract class AccessTokenCommand {
+abstract class AccessTokenCommand {
     private static long COUNTER = 0;
     protected final String state;
     protected final OAuth2ClientConfig config;
@@ -13,23 +13,23 @@ public abstract class AccessTokenCommand {
 
     public AccessTokenCommand(OAuth2ClientConfig config, AccessTokenCallback callback) {
         this(config, callback,
-                new DefaultRandomStateGenerator(),
+                new DefaultRandomStateParameterGenerator(),
                 new DefaultAuthorizationUrlFactory());
     }
 
     public AccessTokenCommand(OAuth2ClientConfig config,
                               AccessTokenCallback callback,
-                              StateGenerator stateGenerator,
+                              StateParameterGenerator stateParameterGenerator,
                               AuthorizationUrlFactory authorizationUrlFactory) {
-        this.state = generateUniqueState(stateGenerator);
+        this.state = generateUniqueState(stateParameterGenerator);
         this.config = config;
         this.callback = callback;
         this.authorizationUrlFactory = authorizationUrlFactory;
     }
 
-    public String generateUniqueState(StateGenerator stateGenerator) {
-        return stateGenerator == null ? (COUNTER++) + "" :
-                (COUNTER++) + "-" + stateGenerator.generateState();
+    public String generateUniqueState(StateParameterGenerator stateParameterGenerator) {
+        return stateParameterGenerator == null ? (COUNTER++) + "" :
+                (COUNTER++) + "-" + stateParameterGenerator.generateState();
     }
 
     public abstract void execute();

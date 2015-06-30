@@ -2,73 +2,57 @@ package io.itdraft.gwt.oauth2;
 
 import io.itdraft.gwt.oauth2.storage.AccessTokenStorage;
 
-import java.util.Set;
-
 
 public class WithStorage extends OAuth2ClientDecorator {
     private AccessTokenStorage storage = AccessTokenStorage.INSTANCE;
+    private AccessToken cachedToken;
 
     public WithStorage(OAuth2Client decorated) {
         super(decorated);
     }
 
-    public void doRetrieveAccessToken(AccessTokenCallback callback) {
-        String key = buildStorageKey();
+    public void doRequestAccessToken(AccessTokenCallback callback) {
+        String key = getStorageKey();
 
-        AccessToken accessToken = storage.get(key);
+        AccessToken accessToken = cachedToken != null ? cachedToken : storage.get(key);
 
         if (isNiceAccessToken(accessToken)) {
             callback.onSuccess(accessToken);
 
         } else {
-            AccessTokenCallback wrappedCallback = wrapCallback(callback, key);
-
-            super.doRetrieveAccessToken(wrappedCallback);
+            super.doRequestAccessToken(wrapCallback(callback));
         }
     }
 
-    @Override
     public void refreshAccessToken(AccessTokenCallback callback) {
-        String key = buildStorageKey();
-
-        AccessTokenCallback wrappedCallback = wrapCallback(callback, key);
-
-        super.refreshAccessToken(wrappedCallback);
+        super.refreshAccessToken(wrapCallback(callback));
     }
 
     public boolean isNiceAccessToken(AccessToken accessToken) {
         return accessToken != null && !accessToken.isExpired();
     }
 
-    private AccessTokenCallback wrapCallback(final AccessTokenCallback callback, final String key) {
+    private AccessTokenCallback wrapCallback(final AccessTokenCallback callback) {
         return new AccessTokenCallback() {
-            @Override
             public void doOnFailure(FailureReason reason) {
                 callback.onFailure(reason);
             }
 
-            @Override
-            public void doOnSuccess(AccessToken result) {
-                storage.put(key, result);
+            public void doOnSuccess(AccessToken token) {
+                storeToken(token);
 
-                callback.onSuccess(result);
+                callback.onSuccess(token);
             }
         };
     }
 
-    private String buildStorageKey() {
-        StringBuilder keyBuilder = new StringBuilder();
+    public void storeToken(AccessToken token) {
+        String key = getStorageKey();
+        cachedToken = token;
+        storage.put(key, token);
+    }
 
-        keyBuilder.append(getConfig().getAuthEndpointUrl());
-        keyBuilder.append(getConfig().getClientId());
-
-        Set<String> scopes = getConfig().getScopes();
-        if (scopes != null) {
-            for (String scope : scopes) {
-                keyBuilder.append(scope);
-            }
-        }
-
-        return keyBuilder.toString();
+    private String getStorageKey() {
+        return getConfig().hashCode() + "";
     }
 }

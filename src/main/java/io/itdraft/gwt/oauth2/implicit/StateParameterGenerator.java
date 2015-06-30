@@ -1,6 +1,6 @@
 package io.itdraft.gwt.oauth2.implicit;
 
-public interface StateGenerator {
+public interface StateParameterGenerator {
 
     String generateState();
 

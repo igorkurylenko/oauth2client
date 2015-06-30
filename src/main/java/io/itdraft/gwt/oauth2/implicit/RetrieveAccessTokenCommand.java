@@ -6,7 +6,7 @@ import io.itdraft.gwt.oauth2.AccessTokenCallback;
 import io.itdraft.gwt.oauth2.FailureReason;
 import io.itdraft.gwt.oauth2.OAuth2ClientConfig;
 
-public class RetrieveAccessTokenCommand extends AccessTokenCommand {
+class RetrieveAccessTokenCommand extends AccessTokenCommand {
 
     public static final int CHECK_POPUP_CLOSED_DELAY_MS = 200;
     private boolean inProgress;
@@ -108,7 +108,6 @@ public class RetrieveAccessTokenCommand extends AccessTokenCommand {
         return $wnd.open(url, 'popupWindow', 'width=' + width + ',height=' + height);
     }-*/;
 
-    @Override
     protected void finish() {
         inProgress = false;
         popupWindow.close();

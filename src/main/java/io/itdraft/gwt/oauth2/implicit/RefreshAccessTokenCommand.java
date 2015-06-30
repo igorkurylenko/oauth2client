@@ -6,10 +6,11 @@ import com.google.gwt.user.client.ui.RootPanel;
 import io.itdraft.gwt.oauth2.AccessTokenCallback;
 import io.itdraft.gwt.oauth2.FailureReason;
 import io.itdraft.gwt.oauth2.OAuth2ClientConfig;
+import io.itdraft.gwt.oauth2.WithAutoRefresh;
 
-public class RefreshAccessTokenCommand extends AccessTokenCommand {
+import static io.itdraft.gwt.oauth2.WithAutoRefresh.APPROXIMATE_TIME_TO_REFRESH_TOKEN_MILLIS;
 
-    public static final int TIMEOUT = 10000;
+class RefreshAccessTokenCommand extends AccessTokenCommand {
     private final Frame frame;
     private boolean inProgress = false;
 
@@ -31,7 +32,7 @@ public class RefreshAccessTokenCommand extends AccessTokenCommand {
                 }
                 return false;
             }
-        }, TIMEOUT);
+        }, APPROXIMATE_TIME_TO_REFRESH_TOKEN_MILLIS);
 
         String url = authorizationUrlFactory.buildUrl(
                 config.getAuthEndpointUrl(),
@@ -46,7 +47,6 @@ public class RefreshAccessTokenCommand extends AccessTokenCommand {
         frame.setUrl(url);
     }
 
-    @Override
     protected void finish() {
         inProgress = false;
 

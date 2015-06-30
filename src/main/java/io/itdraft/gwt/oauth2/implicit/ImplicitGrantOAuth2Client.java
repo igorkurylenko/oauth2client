@@ -10,7 +10,7 @@ import java.util.Set;
 import static io.itdraft.gwt.oauth2.implicit.Utils.isEmpty;
 
 public class ImplicitGrantOAuth2Client extends OAuth2Client {
-    private static Map<String, OAuth2Client> INSTANCES = new HashMap<>();
+    private static Map<String, InstanceTuple> INSTANCES = new HashMap<>();
     protected AuthorizationResponseFactory responseFactory =
             new DefaultAuthorizationResponseFactory();
     private final OAuth2ClientConfig config;
@@ -46,25 +46,28 @@ public class ImplicitGrantOAuth2Client extends OAuth2Client {
     public static OAuth2Client create(OAuth2ClientConfig config) {
         cleanUpPreviousIfExists(config);
 
-        OAuth2Client result = new WithStorage(new ImplicitGrantOAuth2Client(config));
+        ImplicitGrantOAuth2Client originalInstance = new ImplicitGrantOAuth2Client(config);
+        OAuth2Client decoratedInstance = new WithAutoRefresh(
+                new WithStorage(originalInstance));
 
-        INSTANCES.put(config.getClientId(), result);
+        INSTANCES.put(config.getClientId(),
+                new InstanceTuple(decoratedInstance, originalInstance));
 
-        return result;
+        return decoratedInstance;
     }
 
     public static void cleanUpPreviousIfExists(OAuth2ClientConfig config) {
-        OAuth2Client previous = INSTANCES.remove(config.getClientId());
+        InstanceTuple tuple = INSTANCES.remove(config.getClientId());
 
-        if (previous != null) {
-            ImplicitGrantOAuth2Client casted =
-                    (ImplicitGrantOAuth2Client) ((OAuth2ClientDecorator) previous).getDecorated();
-            casted.unbindJsCallbackFunction();
+        if (tuple != null) {
+            tuple.originalInstance.unbindJsCallbackFunction();
         }
     }
 
     public static OAuth2Client get(String clientId) {
-        return INSTANCES.get(clientId);
+        InstanceTuple instanceTuple = INSTANCES.get(clientId);
+
+        return instanceTuple == null ? null : instanceTuple.decoratedInstance;
     }
 
     private ImplicitGrantOAuth2Client(OAuth2ClientConfig config) {
@@ -101,7 +104,7 @@ public class ImplicitGrantOAuth2Client extends OAuth2Client {
         return config;
     }
 
-    protected void doRetrieveAccessToken(final AccessTokenCallback callback) {
+    protected void doRequestAccessToken(final AccessTokenCallback callback) {
         RetrieveAccessTokenCommand command = new RetrieveAccessTokenCommand(
                 config, new RetrieveAccessTokenCallbackWrapper(callback));
 
@@ -247,6 +250,16 @@ public class ImplicitGrantOAuth2Client extends OAuth2Client {
             AccessTokenCallbackWrapper callbackWrapper =
                     (AccessTokenCallbackWrapper) command.getAccessTokenCallback();
             callbackWrapper.originalCallback.deferredOnFailure(reason);
+        }
+    }
+
+    static class InstanceTuple {
+        final OAuth2Client decoratedInstance;
+        final ImplicitGrantOAuth2Client originalInstance;
+
+        InstanceTuple(OAuth2Client decoratedInstance, ImplicitGrantOAuth2Client originalInstance) {
+            this.decoratedInstance = decoratedInstance;
+            this.originalInstance = originalInstance;
         }
     }
 }
